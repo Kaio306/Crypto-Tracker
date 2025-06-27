@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoTracker Analytics - Análise Avançada de Criptomoedas</title>
+    <link rel="stylesheet" href="Styles/analytics-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <p>Carregando análises avançadas...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-chart-line"></i>
+                <h2>CryptoTracker Analytics</h2>
+            </div>
+            
+            <div class="nav-menu">
+              <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Dashboard Principal</span>
+              </a>
+              <a href="analytics.html" class="nav-link active">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+              </a>
+            </div>
+
+            <div class="nav-controls">
+                <div class="period-selector">
+                    <label>Período:</label>
+                    <select id="periodSelect">
+                        <option value="7">7 Dias</option>
+                        <option value="30" selected>30 Dias</option>
+                        <option value="90">90 Dias</option>
+                        <option value="365">1 Ano</option>
+                    </select>
+                </div>
+                
+                <div class="crypto-selector">
+                    <label>Criptomoeda:</label>
+                    <select id="cryptoSelect">
+                        <option value="bitcoin">Bitcoin (BTC)</option>
+                        <option value="ethereum">Ethereum (ETH)</option>
+                        <option value="binancecoin">Binance Coin (BNB)</option>
+                        <option value="cardano">Cardano (ADA)</option>
+                        <option value="solana">Solana (SOL)</option>
+                        <option value="polkadot">Polkadot (DOT)</option>
+                        <option value="chainlink">Chainlink (LINK)</option>
+                        <option value="litecoin">Litecoin (LTC)</option>
+                    </select>
+                </div>
+
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+
+                <button class="refresh-btn" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Key Metrics -->
+        <section class="metrics-overview">
+            <div class="container">
+                <div class="metrics-grid" id="metricsGrid">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 id="currentPrice">Carregando...</h3>
+                            <p>Preço Atual</p>
+                            <span class="metric-change" id="priceChange">-</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 id="avgPrice">Carregando...</h3>
+                            <p>Média do Período</p>
+                            <span class="metric-change" id="avgChange">-</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 id="totalVolume">Carregando...</h3>
+                            <p>Volume Total</p>
+                            <span class="metric-change" id="volumeChange">-</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-wave-square"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 id="volatility">Carregando...</h3>
+                            <p>Volatilidade</p>
+                            <span class="metric-change" id="volatilityTrend">-</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 id="maxPrice">Carregando...</h3>
+                            <p>Máxima do Período</p>
+                            <span class="metric-date" id="maxDate">-</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="metric-info">
+                            <h3 id="minPrice">Carregando...</h3>
+                            <p>Mínima do Período</p>
+                            <span class="metric-date" id="minDate">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Price Chart -->
+        <section class="chart-section">
+            <div class="container">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2>Análise de Preços e Médias Móveis</h2>
+                        <div class="chart-controls">
+                            <div class="legend">
+                                <span class="legend-item">
+                                    <span class="legend-color" style="background: #f7931a;"></span>
+                                    Preço
+                                </span>
+                                <span class="legend-item">
+                                    <span class="legend-color" style="background: #10b981;"></span>
+                                    Média 7d
+                                </span>
+                                <span class="legend-item">
+                                    <span class="legend-color" style="background: #3b82f6;"></span>
+                                    Média 30d
+                                </span>
+                                <span class="legend-item">
+                                    <span class="legend-color" style="background: #8b5cf6;"></span>
+                                    Média 90d
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volume Chart -->
+        <section class="chart-section">
+            <div class="container">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2>Volume de Negociação</h2>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="volumeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Monthly Comparison -->
+        <section class="comparison-section">
+            <div class="container">
+                <h2 class="section-title">Comparação Mensal</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <div class="chart-wrapper">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="comparison-stats">
+                        <h3>Estatísticas Mensais</h3>
+                        <div class="stats-list" id="monthlyStats">
+                            <!-- Estatísticas serão inseridas via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Table -->
+        <section class="performance-section">
+            <div class="container">
+                <h2 class="section-title">Performance Detalhada</h2>
+                <div class="table-container">
+                    <table class="performance-table" id="performanceTable">
+                        <thead>
+                            <tr>
+                                <th>Período</th>
+                                <th>Preço Inicial</th>
+                                <th>Preço Final</th>
+                                <th>Variação (%)</th>
+                                <th>Volume Médio</th>
+                                <th>Volatilidade</th>
+                                <th>ROI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="performanceTableBody">
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Analysis -->
+        <section class="technical-section">
+            <div class="container">
+                <h2 class="section-title">Análise Técnica</h2>
+                <div class="technical-grid">
+                    <div class="technical-card">
+                        <h3>Indicadores de Tendência</h3>
+                        <div class="indicators" id="trendIndicators">
+                            <!-- Indicadores serão inseridos via JavaScript -->
+                        </div>
+                    </div>
+                    <div class="technical-card">
+                        <h3>Suporte e Resistência</h3>
+                        <div class="support-resistance" id="supportResistance">
+                            <!-- Níveis serão inseridos via JavaScript -->
+                        </div>
+                    </div>
+                    <div class="technical-card">
+                        <h3>Momentum</h3>
+                        <div class="momentum" id="momentumIndicators">
+                            <!-- Momentum será inserido via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CryptoTracker Analytics</h3>
+                    <p>Análise avançada de criptomoedas com dados em tempo real e métricas profissionais.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li>Gráficos Interativos</li>
+                        <li>Médias Móveis</li>
+                        <li>Análise Técnica</li>
+                        <li>Comparação Mensal</li>
+                        <li>Múltiplas APIs</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>APIs Utilizadas</h4>
+                    <div class="api-list">
+                        <span class="api-item">CoinGecko</span>
+                        <span class="api-item">CoinCap</span>
+                        <span class="api-item">CryptoCompare</span>
+                        <span class="api-item">Binance</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CryptoTracker Analytics. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="Script/analytics-script.js"></script>
+    <script src="Script/navigation.js"></script>
+</body>
+</html>

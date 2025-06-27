@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CryptoTracker - Monitor de Criptomoedas</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -75,6 +75,12 @@
         <section class="market-overview" id="market-overview">
             <div class="container">
                 <h2 class="section-title">Visão Geral do Mercado</h2>
+                <div class="section-actions">
+                  <a href="analytics.html" class="analytics-btn">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Análise Avançada</span>
+                  </a>
+                </div>
                 <div class="market-stats" id="marketStats">
                     <div class="stat-card">
                         <div class="stat-icon">
@@ -272,7 +278,8 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
-    <script src="news-api.js"></script>
+    <script src="Script/script.js"></script>
+    <script src="Script/news-api.js"></script>
+    <script src="Script/navigation.js"></script>
 </body>
 </html>
