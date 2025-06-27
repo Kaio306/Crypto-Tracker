@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoTracker - Monitor de Criptomoedas</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner">
+            <i class="fab fa-bitcoin"></i>
+        </div>
+        <p>Carregando dados das criptomoedas...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fab fa-bitcoin"></i>
+                <h2>CryptoTracker</h2>
+            </div>
+            
+            <!-- Navigation Menu -->
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="#market-overview" onclick="scrollToSection('market-overview')" class="nav-link">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Mercado</span>
+                    </a></li>
+                    <li><a href="#crypto-list" onclick="scrollToSection('crypto-list')" class="nav-link">
+                        <i class="fas fa-coins"></i>
+                        <span>Cryptos</span>
+                    </a></li>
+                    <li><a href="#converter" onclick="scrollToSection('converter')" class="nav-link">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Conversor</span>
+                    </a></li>
+                    <li><a href="#news" onclick="scrollToSection('news')" class="nav-link">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Notícias</span>
+                    </a></li>
+                    <li><a href="#favorites" onclick="scrollToSection('favorites')" class="nav-link favorites-nav" id="favoritesNav" style="display: none;">
+                        <i class="fas fa-heart"></i>
+                        <span>Favoritos</span>
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="nav-controls">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Buscar criptomoeda...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Market Overview -->
+        <section class="market-overview" id="market-overview">
+            <div class="container">
+                <h2 class="section-title">Visão Geral do Mercado</h2>
+                <div class="market-stats" id="marketStats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalMarketCap">Carregando...</h3>
+                            <p>Market Cap Total</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalVolume">Carregando...</h3>
+                            <p>Volume 24h</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="btcDominance">Carregando...</h3>
+                            <p>Dominância BTC</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="activeCryptos">Carregando...</h3>
+                            <p>Criptos Ativas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Cryptocurrencies -->
+        <section class="crypto-list" id="crypto-list">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Top Criptomoedas</h2>
+                    <div class="list-controls">
+                        <select id="currencySelect">
+                            <option value="usd">USD</option>
+                            <option value="brl">BRL</option>
+                            <option value="eur">EUR</option>
+                        </select>
+                        <button class="refresh-btn" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="crypto-table-container">
+                    <table class="crypto-table" id="cryptoTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Moeda</th>
+                                <th>Preço</th>
+                                <th>24h %</th>
+                                <th>7d %</th>
+                                <th>Market Cap</th>
+                                <th>Volume</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cryptoTableBody">
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 2rem;">
+                                    <i class="fas fa-spinner fa-spin"></i> Carregando dados...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Favorites Section -->
+        <section class="favorites" id="favorites" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">Meus Favoritos</h2>
+                <div class="favorites-grid" id="favoritesGrid">
+                    <!-- Favoritos serão inseridos via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Converter Section -->
+        <section class="converter" id="converter">
+            <div class="container">
+                <h2 class="section-title">Conversor de Criptomoedas</h2>
+                <div class="converter-card">
+                    <div class="converter-input">
+                        <label>De:</label>
+                        <div class="input-group">
+                            <input type="number" id="fromAmount" placeholder="0" value="1">
+                            <select id="fromCrypto">
+                                <option value="bitcoin">Bitcoin (BTC)</option>
+                                <option value="ethereum">Ethereum (ETH)</option>
+                                <option value="binancecoin">Binance Coin (BNB)</option>
+                                <option value="cardano">Cardano (ADA)</option>
+                                <option value="solana">Solana (SOL)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="converter-swap">
+                        <button id="swapBtn">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                    </div>
+                    <div class="converter-input">
+                        <label>Para:</label>
+                        <div class="input-group">
+                            <input type="number" id="toAmount" placeholder="0" readonly>
+                            <select id="toCrypto">
+                                <option value="ethereum">Ethereum (ETH)</option>
+                                <option value="bitcoin">Bitcoin (BTC)</option>
+                                <option value="binancecoin">Binance Coin (BNB)</option>
+                                <option value="cardano">Cardano (ADA)</option>
+                                <option value="solana">Solana (SOL)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section class="news" id="news">
+            <div class="container">
+                <h2 class="section-title">
+                    Últimas Notícias Crypto 
+                    <span style="font-size: 0.6em; color: var(--success-color);">
+                        <i class="fas fa-circle" style="font-size: 0.5em;"></i> AO VIVO
+                    </span>
+                </h2>
+                <div class="news-grid">
+                    <!-- Notícias serão carregadas via JavaScript -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                        <i class="fas fa-spinner fa-spin"></i> Carregando notícias...
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CryptoTracker</h3>
+                    <p>Monitore suas criptomoedas favoritas em tempo real com dados precisos e atualizados.</p>
+                </div>
+                <div class="footer-section">
+                  <h4>Links Úteis</h4>
+                  <ul>
+                    <li><a href="#market-overview" onclick="scrollToSection('market-overview')">Visão Geral</a></li>
+                    <li><a href="#crypto-list" onclick="scrollToSection('crypto-list')">Top Cryptos</a></li>
+                    <li><a href="#converter" onclick="scrollToSection('converter')">Conversor</a></li>
+                    <li><a href="#news" onclick="scrollToSection('news')">Notícias</a></li>
+                    <li><a href="#favorites" onclick="scrollToSection('favorites')" id="favoritesLink" style="display: none;">Favoritos</a></li>
+                  </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p>Email: contato@cryptotracker.com</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+    <p>&copy; 2025 CryptoTracker. Todos os direitos reservados.</p>
+    <div class="api-credits">
+        <p>APIs utilizadas:</p>
+        <div class="api-list">
+            <span class="api-item">CoinGecko</span>
+            <span class="api-item">CoinCap</span>
+            <span class="api-item">CryptoCompare</span>
+            <span class="api-item">Binance</span>
+            <span class="api-item">CryptoPanic</span>
+            <span class="api-item">RSS2JSON</span>
+        </div>
+    </div>
+</div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="news-api.js"></script>
+</body>
+</html>
